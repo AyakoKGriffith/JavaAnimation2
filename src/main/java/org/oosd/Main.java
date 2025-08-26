@@ -5,7 +5,9 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -65,10 +67,14 @@ public class Main extends Application {
 
         Label label = new Label("Configuration");
 
+        CheckBox cb = new CheckBox("Has Shadow");
+        cb.setSelected(hasShadow);
+        cb.setOnAction(e-> hasShadow = cb.isSelected());
+
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> showMainScreen());
 
-        mainScreen.getChildren().addAll(label, backButton);
+        mainScreen.getChildren().addAll(label, cb, backButton);
         root.getChildren().setAll(mainScreen);
     }
 
@@ -84,6 +90,13 @@ public class Main extends Application {
         Circle ball = new Circle(10, Color.RED);
         ball.setCenterX(fieldWidth / 2);
         ball.setCenterY(fieldHeight / 2);
+
+        if(hasShadow){
+            DropShadow shadow = new DropShadow();
+            shadow.setOffsetX(5);
+            shadow.setOffsetY(5);
+            ball.setEffect(shadow);
+        }
 
         Button backButton = new Button("Back");
         backButton.setLayoutX(10);
