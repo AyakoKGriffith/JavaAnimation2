@@ -2,6 +2,7 @@ package org.oosd;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.Optional;
 
 public class Main extends Application {
 
@@ -74,11 +76,21 @@ public class Main extends Application {
         configButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");
-        exitButton.setOnAction(e-> System.exit(0));
+        exitButton.setOnAction(e-> showExitConfirmation());
         exitButton.getStyleClass().add("menu-button");
 
         mainScreen.getChildren().addAll(label, startButton, configButton, exitButton);
         root.getChildren().setAll(mainScreen);
+    }
+
+    public void showExitConfirmation() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit Confirmation");
+        alert.setContentText("Are you sure you want to exit?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Platform.exit();
+        }
     }
 
     private final BorderPane configurationScreen = new BorderPane();
