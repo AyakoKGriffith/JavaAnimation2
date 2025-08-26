@@ -4,8 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
@@ -30,6 +30,16 @@ public class Main extends Application {
     private final double fieldHeight = 300;
 
     private boolean hasShadow = false;
+    private String colorString = "RED";
+
+    private Color getColor() {
+        return switch (colorString){
+            case "RED" -> Color.RED;
+            case "GREEN" -> Color.GREEN;
+            case "BLUE" -> Color.BLUE;
+            default -> Color.RED;
+        };
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -71,10 +81,28 @@ public class Main extends Application {
         cb.setSelected(hasShadow);
         cb.setOnAction(e-> hasShadow = cb.isSelected());
 
+        Label colorLabel = new Label("Color");
+        RadioButton rbRed = new RadioButton("RED");
+        rbRed.setOnAction(e-> colorString = "RED");
+        RadioButton rbGreen = new RadioButton("GREEN");
+        rbGreen.setOnAction(e-> colorString = "GREEN");
+        RadioButton rbBlue = new RadioButton("BLUE");
+        rbBlue.setOnAction(e-> colorString = "BLUE");
+        ToggleGroup colorGroup = new ToggleGroup();
+        rbRed.setToggleGroup(colorGroup);
+        rbGreen.setToggleGroup(colorGroup);
+        rbBlue.setToggleGroup(colorGroup);
+        switch(colorString){
+            case "RED" -> rbRed.setSelected(true);
+            case "GREEN" -> rbGreen.setSelected(true);
+            case "BLUE" -> rbBlue.setSelected(true);
+            default-> rbRed.setSelected(true);
+        }
+
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> showMainScreen());
 
-        mainScreen.getChildren().addAll(label, cb, backButton);
+        mainScreen.getChildren().addAll(label, cb, colorLabel, rbRed, rbGreen, rbBlue, backButton);
         root.getChildren().setAll(mainScreen);
     }
 
@@ -87,7 +115,7 @@ public class Main extends Application {
         field.setStroke(Color.BLACK);
 
         // Create red ball
-        Circle ball = new Circle(10, Color.RED);
+        Circle ball = new Circle(10, getColor());
         ball.setCenterX(fieldWidth / 2);
         ball.setCenterY(fieldHeight / 2);
 
