@@ -31,6 +31,7 @@ public class Main extends Application {
 
     private boolean hasShadow = false;
     private String colorString = "RED";
+    private int size = 10;
 
     private Color getColor() {
         return switch (colorString){
@@ -99,10 +100,22 @@ public class Main extends Application {
             default-> rbRed.setSelected(true);
         }
 
+        Label sizeLabel = new Label("Size: " + size);
+        Slider sizeSlider = new Slider(5, 20, size);
+        sizeSlider.setShowTickMarks(true);
+        sizeSlider.setShowTickLabels(true);
+        sizeSlider.setMajorTickUnit(5);
+        sizeSlider.valueProperty().addListener(
+                (obs, oldVal, newVal) -> {
+                    size = newVal.intValue();
+                    sizeLabel.setText("Size: " + size);
+                }
+        );
+
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> showMainScreen());
 
-        mainScreen.getChildren().addAll(label, cb, colorLabel, rbRed, rbGreen, rbBlue, backButton);
+        mainScreen.getChildren().addAll(label, cb, colorLabel, rbRed, rbGreen, rbBlue, sizeLabel, sizeSlider, backButton);
         root.getChildren().setAll(mainScreen);
     }
 
@@ -115,7 +128,7 @@ public class Main extends Application {
         field.setStroke(Color.BLACK);
 
         // Create red ball
-        Circle ball = new Circle(10, getColor());
+        Circle ball = new Circle(size, getColor());
         ball.setCenterX(fieldWidth / 2);
         ball.setCenterY(fieldHeight / 2);
 
