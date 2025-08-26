@@ -3,6 +3,7 @@ package org.oosd;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -46,6 +47,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         root = new StackPane();
         scene = new Scene(root, fieldWidth, fieldHeight);
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         showMainScreen();
 
@@ -56,28 +58,36 @@ public class Main extends Application {
 
     private void showMainScreen() {
         VBox mainScreen = new VBox(10);
+        mainScreen.setAlignment(Pos.CENTER);
         mainScreen.setPadding(new Insets(20));
+        mainScreen.setSpacing(20);
 
         Label label = new Label("Main Screen");
+        label.getStyleClass().add("title-label");
 
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> showGameScreen());
+        startButton.getStyleClass().add("menu-button");
 
         Button configButton = new Button("Configuration");
         configButton.setOnAction(e -> showConfigurationScreen());
+        configButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");
         exitButton.setOnAction(e-> System.exit(0));
+        exitButton.getStyleClass().add("menu-button");
 
         mainScreen.getChildren().addAll(label, startButton, configButton, exitButton);
         root.getChildren().setAll(mainScreen);
     }
 
     private void showConfigurationScreen() {
-        VBox mainScreen = new VBox(10);
-        mainScreen.setPadding(new Insets(20));
+        VBox configScreen = new VBox(10);
+        configScreen.setAlignment(Pos.CENTER);
+        configScreen.setPadding(new Insets(20));
 
         Label label = new Label("Configuration");
+        label.getStyleClass().add("title-label");
 
         CheckBox cb = new CheckBox("Has Shadow");
         cb.setSelected(hasShadow);
@@ -115,9 +125,10 @@ public class Main extends Application {
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> showMainScreen());
+        backButton.getStyleClass().add("menu-button");
 
-        mainScreen.getChildren().addAll(label, cb, colorLabel, rbRed, rbGreen, rbBlue, sizeLabel, sizeSlider, backButton);
-        root.getChildren().setAll(mainScreen);
+        configScreen.getChildren().addAll(label, cb, colorLabel, rbRed, rbGreen, rbBlue, sizeLabel, sizeSlider, backButton);
+        root.getChildren().setAll(configScreen);
     }
 
     private void showGameScreen() {
