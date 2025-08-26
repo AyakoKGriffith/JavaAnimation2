@@ -81,18 +81,48 @@ public class Main extends Application {
         root.getChildren().setAll(mainScreen);
     }
 
-    private void showConfigurationScreen() {
-        VBox configScreen = new VBox(10);
-        configScreen.setAlignment(Pos.CENTER);
-        configScreen.setPadding(new Insets(20));
+    private final BorderPane configurationScreen = new BorderPane();
 
+    private void showConfigurationScreen() {
+        buildScreen();
+        root.getChildren().setAll(configurationScreen);
+    }
+
+    private StackPane getTopPane(){
         Label label = new Label("Configuration");
         label.getStyleClass().add("title-label");
+        StackPane topPane = new StackPane(label);
+        topPane.setPadding(new Insets(10, 0, 0, 0));
+        topPane.setAlignment(Pos.CENTER);
+        return topPane;
+    }
 
-        CheckBox cb = new CheckBox("Has Shadow");
-        cb.setSelected(hasShadow);
-        cb.setOnAction(e-> hasShadow = cb.isSelected());
+    private VBox getCenterPane() {
+        VBox centerPane = new VBox(10);
+        centerPane.setPadding(new Insets(20));
+        centerPane.getChildren().addAll(getShadowCheckBox(), getColorRadioPane(), getSizePane());
+        return centerPane;
+    }
 
+    private StackPane getBottomPane(){
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> showMainScreen());
+        backButton.getStyleClass().add("menu-button");
+        StackPane bottomPane = new StackPane(backButton);
+        bottomPane.setPadding(new Insets(00, 0, 20, 0));
+        bottomPane.setAlignment(Pos.CENTER);
+        return bottomPane;
+    }
+
+    private CheckBox getShadowCheckBox(){
+        CheckBox cbShadow = new CheckBox("Enable Shadow");
+        cbShadow.setSelected(hasShadow);
+        cbShadow.setOnAction(e-> hasShadow = cbShadow.isSelected());
+        return cbShadow;
+    }
+
+    private HBox getColorRadioPane(){
+        HBox colorPane = new HBox(20);
         Label colorLabel = new Label("Color");
         RadioButton rbRed = new RadioButton("RED");
         rbRed.setOnAction(e-> colorString = "RED");
@@ -105,30 +135,38 @@ public class Main extends Application {
         rbGreen.setToggleGroup(colorGroup);
         rbBlue.setToggleGroup(colorGroup);
         switch(colorString){
-            case "RED" -> rbRed.setSelected(true);
             case "GREEN" -> rbGreen.setSelected(true);
             case "BLUE" -> rbBlue.setSelected(true);
             default-> rbRed.setSelected(true);
         }
+        colorPane.getChildren().addAll(colorLabel, rbRed, rbGreen, rbBlue);
+        return colorPane;
+    }
 
-        Label sizeLabel = new Label("Size: " + size);
+    private HBox getSizePane(){
+        HBox sizePane = new HBox(10);
+        Label sizeLabel = new Label("Size: ");
         Slider sizeSlider = new Slider(5, 20, size);
+        Label sizeSet = new Label("" + size);
         sizeSlider.setShowTickMarks(true);
         sizeSlider.setShowTickLabels(true);
         sizeSlider.setMajorTickUnit(5);
         sizeSlider.valueProperty().addListener(
                 (obs, oldVal, newVal) -> {
                     size = newVal.intValue();
-                    sizeLabel.setText("Size: " + size);
+                    sizeSet.setText("" + size);
                 }
         );
+        HBox.setHgrow(sizeSlider, Priority.ALWAYS);
+        sizePane.getChildren().addAll(sizeLabel, sizeSlider, sizeSet);
+        return sizePane;
+    }
 
-        Button backButton = new Button("Back");
-        backButton.setOnAction(e -> showMainScreen());
-        backButton.getStyleClass().add("menu-button");
 
-        configScreen.getChildren().addAll(label, cb, colorLabel, rbRed, rbGreen, rbBlue, sizeLabel, sizeSlider, backButton);
-        root.getChildren().setAll(configScreen);
+    private void buildScreen() {
+        configurationScreen.setTop(getTopPane());
+        configurationScreen.setBottom(getBottomPane());
+        configurationScreen.setCenter(getCenterPane());
     }
 
     private void showGameScreen() {
