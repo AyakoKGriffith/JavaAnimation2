@@ -5,12 +5,15 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import java.awt.*;
 
 public class Main extends Application {
 
@@ -23,6 +26,8 @@ public class Main extends Application {
 
     private final double fieldWidth = 400;
     private final double fieldHeight = 300;
+
+    private boolean hasShadow = false;
 
     @Override
     public void start(Stage primaryStage) {
@@ -39,11 +44,31 @@ public class Main extends Application {
     private void showMainScreen() {
         VBox mainScreen = new VBox(10);
         mainScreen.setPadding(new Insets(20));
-        Button startButton = new Button("Start Game");
 
+        Label label = new Label("Main Screen");
+
+        Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> showGameScreen());
 
-        mainScreen.getChildren().add(startButton);
+        Button configButton = new Button("Configuration");
+        configButton.setOnAction(e -> showConfigurationScreen());
+
+        Button exitButton = new Button("Exit");
+
+        mainScreen.getChildren().addAll(label, startButton, configButton, exitButton);
+        root.getChildren().setAll(mainScreen);
+    }
+
+    private void showConfigurationScreen() {
+        VBox mainScreen = new VBox(10);
+        mainScreen.setPadding(new Insets(20));
+
+        Label label = new Label("Configuration");
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> showMainScreen());
+
+        mainScreen.getChildren().addAll(label, backButton);
         root.getChildren().setAll(mainScreen);
     }
 
