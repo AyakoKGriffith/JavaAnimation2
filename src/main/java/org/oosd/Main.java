@@ -67,6 +67,7 @@ public class Main extends Application {
         configButton.setOnAction(e -> showConfigurationScreen());
 
         Button exitButton = new Button("Exit");
+        exitButton.setOnAction(e-> System.exit(0));
 
         mainScreen.getChildren().addAll(label, startButton, configButton, exitButton);
         root.getChildren().setAll(mainScreen);
@@ -152,17 +153,13 @@ public class Main extends Application {
         // Key control
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.UP) {
-                dx = 0;
-                dy = -3;
+                dy = dy>0? dy+1: dy-1;
             } else if (e.getCode() == KeyCode.DOWN) {
-                dx = 0;
-                dy = 3;
+                dy = dy<0? dy+1: dy-1;
             } else if (e.getCode() == KeyCode.LEFT) {
-                dx = -3;
-                dy = 0;
+                dx = dx<0? dx+1: dx-1;
             } else if (e.getCode() == KeyCode.RIGHT) {
-                dx = 3;
-                dy = 0;
+                dx = dx>0? dx+1: dx-1;
             }
         });
 
