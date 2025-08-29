@@ -3,25 +3,31 @@ package org.oosd;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.oosd.UI.*;
 import org.oosd.UI.MainScreen;
 import org.oosd.UI.Screen;
 import org.oosd.model.Game;
 import java.util.Optional;
 
-public class Main extends Application {
+public class Main extends Application implements Frame{
     private StackPane root;
     private Game game;
     private Screen configScreen;
     private Screen gameScreen;
 
-    public void buildScreens(){
+    private void buildScreens(){
         Screen mainScreen = new MainScreen(this);
+        ScreenWithGame configScreen = new ConfigScreen(this);
 
         mainScreen.setRoute("config", configScreen);
         mainScreen.setRoute("game", gameScreen);
+
+        configScreen.setGame(game);
+        configScreen.setRoute("back", mainScreen);
 
         showScreen(mainScreen);
     }

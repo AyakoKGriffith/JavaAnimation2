@@ -11,7 +11,7 @@ import org.oosd.Main;
 public class MainScreen implements Screen {
     private VBox mainScreen;
     private Screen configScreen, gameScreen;
-    private Main parent;
+    private Frame parent;
 
     @Override
     public Node getScreen(){return mainScreen;}
@@ -25,7 +25,7 @@ public class MainScreen implements Screen {
         }
     }
 
-    public MainScreen (Main frame){
+    public MainScreen(Frame frame) {
         parent = frame;
         buildScreen();
     }
@@ -40,11 +40,11 @@ public class MainScreen implements Screen {
         label.getStyleClass().add("title-label");
 
         Button startButton = new Button("Start Game");
-//        startButton.setOnAction(e -> parent.showScreen(gameScreen));
+//      startButton.setOnAction(e -> parent.showScreen(gameScreen));
         startButton.getStyleClass().add("menu-button");
 
         Button configButton = new Button("Configuration");
-//        configButton.setOnAction(e -> parent.showScreen(configScreen));
+        configButton.setOnAction(e -> parent.showScreen(configScreen));
         configButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");

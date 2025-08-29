@@ -14,6 +14,9 @@ import javafx.animation.AnimationTimer;
 //
 //public class GameScreen {
 //        private AnimationTimer timer;
+//        private String colorString = "RED";
+//        private int size = 10;
+
 //
 //    private void showGameScreen() {
 //        Pane gamePane = new Pane();
