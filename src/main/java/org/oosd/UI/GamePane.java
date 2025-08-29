@@ -34,6 +34,14 @@ public class GamePane extends Pane {
         };
     }
 
+    private void initSprites (int num){
+        sprites.clear();
+        for (int i=0; i<num; ++i){
+            Sprite sprite = SpriteFactory.getFactory().createSprite();
+            sprites.add(sprite);
+        }
+    }
+
     private void buildGamePane(){
         // Create field border
         Rectangle field = new Rectangle(0, 0, Game.fieldWidth, Game.fieldHeight);
@@ -50,6 +58,11 @@ public class GamePane extends Pane {
         }
 
         getChildren().setAll(field, ball);
+
+        initSprites(10);
+        for (Sprite sprite: sprites)
+            getChildren().add(sprite.getNode());
+
         requestFocus();
     }
     void stopGame(){timer.stop();}

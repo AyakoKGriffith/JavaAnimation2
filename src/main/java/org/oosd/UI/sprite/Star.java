@@ -1,6 +1,7 @@
 package org.oosd.UI.sprite;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 
 import java.awt.*;
 
