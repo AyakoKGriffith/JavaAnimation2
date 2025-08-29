@@ -114,18 +114,9 @@ public class GameScreen implements ScreenWithGame {
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                double nextX = ball.getCenterX() + game.getDx();
-                double nextY = ball.getCenterY() + game.getDy();
-                // Bounce off edges
-                if (nextX - ball.getRadius() < 0 || nextX + ball.getRadius() > Game.fieldWidth) {
-                    game.setDx(-game.getDx());
-                }
-                if (nextY - ball.getRadius() < 0 || nextY + ball.getRadius() > Game.fieldHeight) {
-                    game.setDy(-game.getDy());
-                }
-
-                ball.setCenterX(ball.getCenterX() + game.getDx());
-                ball.setCenterY(ball.getCenterY() + game.getDy());
+                game.proceed();
+                ball.setCenterX(game.getX());
+                ball.setCenterY(game.getY());
             }
         };
         timer.start();
