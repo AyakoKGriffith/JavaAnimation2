@@ -1,26 +1,20 @@
 package org.oosd.model;
 
-import javafx.animation.AnimationTimer;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 public class Game {
+    static public final double fieldWidth = 400;
+    static public final double fieldHeight = 270;
     private double dx = 3;       // X velocity
     private double dy = 3;       // Y velocity
+    private double x = fieldWidth / 2, y = fieldHeight / 2;
 
     private boolean hasShadow = false;
     private String colorString = "RED";
     private int size = 10;
 
-    static public final double fieldWidth = 400;
-    static public final double fieldHeight = 300;
-
-    public double getDx() {return dx;}
-    public void setDx(double dx) {this.dx = dx;}
-    public double getDy() {return dy;}
-    public void setDy(double dy) {this.dy = dy;}
+    public double getX() {return x;}
+    public double getY() {return y;}
 
     public boolean isHasShadow() {return hasShadow;}
     public void setHasShadow(boolean hasShadow) {this.hasShadow = hasShadow;}
@@ -45,4 +39,17 @@ public class Game {
     public void increaseY() {dy = dy>0? dy+1: dy-1;}
     public void decreaseY() {dy = dy<0? dy+1: dy-1;}
 
+    public void proceed(){
+        double nextX = x + dx;
+        double nextY = y + dy;
+        // Bounce off edges
+        if (nextX - size < 0 || nextX + size > Game.fieldWidth) {
+            dx = -dx;
+        }
+        if (nextY - size < 0 || nextY + size > Game.fieldHeight) {
+            dy = -dy;
+        }
+        x += dx;
+        y += dy;
+    }
 }

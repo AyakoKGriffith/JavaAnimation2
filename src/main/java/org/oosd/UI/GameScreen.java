@@ -1,111 +1,70 @@
 package org.oosd.UI;
 
-import javafx.animation.AnimationTimer;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import org.oosd.model.Game;
 
 public class GameScreen implements ScreenWithGame {
-    private Game game;
-    private Pane gamePane;
+    private final GamePane gamePane;
+    private final Frame parent;
+    private BorderPane borderPane;
     private Screen mainScreen;
-    private Frame parent;
-    private AnimationTimer timer;
-    private Circle ball;
+
 
     public GameScreen(Frame frame) {
         parent = frame;
-        gamePane = new Pane();
+        gamePane = new GamePane();
+        buildScreen();
+
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
-                buildScreen();
-                setControl(newScene);
-                startGame();
+                gamePane.startGame();
             }
         });
     }
 
-    private void buildScreen() {
-        // Create field border
-        Rectangle field = new Rectangle(0, 0, Game.fieldWidth, Game.fieldHeight);
-        field.setFill(Color.TRANSPARENT);
-        field.setStroke(Color.BLACK);
-
-        // Create red ball
-        ball = new Circle(game.getSize(), game.getColor());
-        ball.setCenterX(Game.fieldWidth / 2);
-        ball.setCenterY(Game.fieldHeight / 2);
-        if (game.isHasShadow()) {
-            DropShadow shadow = new DropShadow();
-            shadow.setOffsetX(5);
-            shadow.setOffsetY(5);
-            ball.setEffect(shadow);
-        }
-
+    private StackPane getBottomPane(){
         Button backButton = new Button("Back");
-        backButton.setLayoutX(10);
-        backButton.setLayoutY(10);
+        backButton.getStyleClass().add("menu-button");
+        backButton.setFocusTraversable(false);
+
         backButton.setOnAction(e -> {
-            timer.stop();
+            gamePane.stopGame();
             parent.showScreen(mainScreen);
         });
 
-        gamePane.getChildren().setAll(field, ball, backButton);
-        gamePane.requestFocus();
+        StackPane bottomPane = new StackPane(backButton);
+        bottomPane.setAlignment(Pos.CENTER);
+        bottomPane.setPadding(new Insets(0, 0, 20, 0));
+        bottomPane.setFocusTraversable(false);
+        return bottomPane;
     }
 
-    private void setControl(Scene scene) {
-        // Key control
-        scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.UP) {
-                game.increaseY();
-            } else if (e.getCode() == KeyCode.DOWN) {
-                game.decreaseY();
-            } else if (e.getCode() == KeyCode.LEFT) {
-                game.decreaseX();
-            } else if (e.getCode() == KeyCode.RIGHT) {
-                game.increaseX();
-            }
-        });
+    private void buildScreen() {
+        borderPane = new BorderPane();
 
+        // Create field border
+        StackPane gamePaneWrapper = new StackPane(gamePane);
+        gamePaneWrapper.setAlignment(Pos.CENTER);
+        gamePaneWrapper.setPadding(new Insets(10, 0, 10, 10));
+        borderPane.setTop(gamePaneWrapper);
+        borderPane.setBottom(getBottomPane());
     }
 
-    private void startGame() {
-        timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                double nextX = ball.getCenterX() + game.getDx();
-                double nextY = ball.getCenterY() + game.getDy();
-                // Bounce off edges
-                if (nextX - ball.getRadius() < 0 || nextX + ball.getRadius() > Game.fieldWidth) {
-                    game.setDx(-game.getDx());
-                }
-                if (nextY - ball.getRadius() < 0 || nextY + ball.getRadius() > Game.fieldHeight) {
-                    game.setDy(-game.getDy());
-                }
 
-                ball.setCenterX(ball.getCenterX() + game.getDx());
-                ball.setCenterY(ball.getCenterY() + game.getDy());
-            }
-        };
-        timer.start();
-    }
 
     @Override
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGame(Game game)  {
+        gamePane.setGame(game);
     }
 
     @Override
     public Node getScreen() {
-        return gamePane;
+        return borderPane;
     }
 
     @Override
