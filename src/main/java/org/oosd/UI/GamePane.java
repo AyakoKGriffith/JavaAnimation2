@@ -6,12 +6,21 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import org.oosd.UI.sprite.Sprite;
+import org.oosd.UI.sprite.SpriteFactory;
+import org.oosd.UI.sprite.Star;
 import org.oosd.model.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePane extends Pane {
     private AnimationTimer timer;
     private Circle ball;
     private Game game;
+
+    private final List<Sprite> sprites;
+    public GamePane() {sprites = new ArrayList<>();}
 
     public void setGame(Game game) {
         this.game = game;
