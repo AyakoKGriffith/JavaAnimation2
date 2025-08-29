@@ -8,6 +8,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.oosd.UI.*;
+import org.oosd.controller.GameController;
 import org.oosd.model.Game;
 import java.util.Optional;
 
@@ -35,14 +36,17 @@ public class Main extends Application implements Frame{
     @Override
     public void start(Stage primaryStage) {
         game = new Game();
+        GameController gc = new GameController(game);
         root = new StackPane();
         Scene scene = new Scene(root, Game.fieldWidth + 2 * Env.HORIZONTAL_MARGIN,
                 Game.fieldHeight + Env.TOP_MARGIN + Env.BOTTOM_MARGIN);
+        scene.setOnKeyPressed(e -> gc.receiveKeyPress(e.getCode()));
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         primaryStage.setTitle("JavaFX Multi-Screen Game");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setResizable(false);
 
         buildScreens();
         primaryStage.setOnCloseRequest(event -> {
