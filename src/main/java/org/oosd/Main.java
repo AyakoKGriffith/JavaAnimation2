@@ -8,26 +8,26 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.oosd.UI.*;
-import org.oosd.UI.MainScreen;
-import org.oosd.UI.Screen;
 import org.oosd.model.Game;
 import java.util.Optional;
 
 public class Main extends Application implements Frame{
     private StackPane root;
     private Game game;
-    private Screen configScreen;
-    private Screen gameScreen;
 
     private void buildScreens(){
         Screen mainScreen = new MainScreen(this);
         ScreenWithGame configScreen = new ConfigScreen(this);
+        ScreenWithGame gameScreen = new GameScreen(this);
 
         mainScreen.setRoute("config", configScreen);
         mainScreen.setRoute("game", gameScreen);
 
         configScreen.setGame(game);
         configScreen.setRoute("back", mainScreen);
+
+        gameScreen.setGame(game);
+        gameScreen.setRoute("back", mainScreen);
 
         showScreen(mainScreen);
     }

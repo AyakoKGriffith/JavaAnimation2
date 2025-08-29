@@ -40,7 +40,7 @@ public class MainScreen implements Screen {
         label.getStyleClass().add("title-label");
 
         Button startButton = new Button("Start Game");
-//      startButton.setOnAction(e -> parent.showScreen(gameScreen));
+        startButton.setOnAction(e -> parent.showScreen(gameScreen));
         startButton.getStyleClass().add("menu-button");
 
         Button configButton = new Button("Configuration");
