@@ -56,7 +56,6 @@ public class GameScreen implements ScreenWithGame {
     }
 
 
-
     @Override
     public void setGame(Game game)  {
         gamePane.setGame(game);
