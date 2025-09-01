@@ -1,70 +1,54 @@
 package org.oosd.model;
 
-import javafx.scene.paint.Color;
+import org.oosd.UI.sprite.SpriteFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
     static public final double fieldWidth = 400;
     static public final double fieldHeight = 270;
-    private double x = fieldWidth / 2, y = fieldHeight / 2;
+    private Player player;
+    private int foodNum;
+    private List<GameEntity> entities;
 
-    private double dx = 3;       // X velocity
-    private double dy = 3;       // Y velocity
-    static final int MAX_SPEED = 5;
+    public Game() {foodNum = 8;}
 
-    private boolean hasShadow = false;
-    private String colorString = "RED";
-    private int size = 10;
-
-    public double getX() {return x;}
-    public double getY() {return y;}
-
-    public boolean isHasShadow() {return hasShadow;}
-    public void setHasShadow(boolean hasShadow) {this.hasShadow = hasShadow;}
-
-    public String getColorString() {return colorString;}
-    public void setColorString(String colorString) {this.colorString = colorString;}
-
-    public Color getColor() {
-        return switch (colorString){
-            case "RED" -> Color.RED;
-            case "GREEN" -> Color.GREEN;
-            case "BLUE" -> Color.BLUE;
-            default -> Color.RED;
-        };
+    public void initGame() {
+        player = new Player();
+        entities = new ArrayList<>();
+        entities.add(player);
+        SpriteFactory.getFactory().addEntity(player);
+        player.setX(fieldWidth /2);
+        player.setY(fieldHeight /2);
     }
 
-    public int getSize() {return size;}
-    public void setSize(int size) {this.size = size;}
-
-    public void increaseX() {
-        dy=0;
-        dx = Math.min (dx+1, MAX_SPEED);
-    }
-    public void decreaseX() {
-        dy = 0;
-        dx = Math.max(dx-1,-MAX_SPEED);
-    }
-    public void increaseY() {
-        dx=0;
-        dy = Math.min (dy+1, MAX_SPEED);
-    }
-    public void decreaseY() {
-        dx=0;
-        dy = Math.max (dy-1, -MAX_SPEED);
+    private synchronized void fillFoods() {
+        int curFoodNum = getEntityNum(EntityType.FOOD);
+        if (curFoodNum * 2 > foodNum) return;
+        for (int i = curFoodNum; i < foodNum; ++i) {
+            Food food = new Food();
+            entities.add(food);
+            SpriteFactory.getFactory().addEntity(food);
+        }
     }
 
+    private int getEntityNum(EntityType type) {
+        return (int) entities.stream().filter(e-> e.getType() == type).count();
+    }
+
+    private synchronized void removeDeadEntities() {
+        entities.removeIf(GameEntity::isDead);
+    }
 
     public void proceed(){
-        double nextX = x + dx;
-        double nextY = y + dy;
-        // Bounce off edges
-        if (nextX - size < 0 || nextX + size > Game.fieldWidth) {
-            dx = -dx;
-        }
-        if (nextY - size < 0 || nextY + size > Game.fieldHeight) {
-            dy = -dy;
-        }
-        x += dx;
-        y += dy;
+        for (GameEntity entity: entities) entity.process();
+        removeDeadEntities();
+        fillFoods();
     }
+
+    public void increaseX()  {player.increaseX();}
+    public void decreaseX()  {player.decreaseX();}
+    public void increaseY()  {player.increaseY();}
+    public void decreaseY()  {player.decreaseY();}
 }

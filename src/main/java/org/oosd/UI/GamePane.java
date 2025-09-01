@@ -1,26 +1,47 @@
 package org.oosd.UI;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import org.oosd.UI.sprite.Sprite;
 import org.oosd.UI.sprite.SpriteFactory;
-import org.oosd.UI.sprite.Star;
 import org.oosd.model.Game;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class GamePane extends Pane {
     private AnimationTimer timer;
-    private Circle ball;
     private Game game;
-
     private final List<Sprite> sprites;
+
     public GamePane() {sprites = new ArrayList<>();}
+
+
+    private synchronized void removeDeadSprites() {
+        List<Sprite> deadSprites = sprites.stream()
+                .filter(Sprite::isDead)
+                .toList();
+        if (deadSprites.isEmpty()) return;
+        sprites.removeAll(deadSprites);
+        getChildren().removeAll(
+                deadSprites.stream().map(Sprite::getNode)
+                        .toList()
+        );
+    }
+
+    private synchronized void addSprites() {
+        List<Sprite> list = SpriteFactory.getFactory().produceSprites();
+        if (list == null) return;
+        for (Sprite sprite : list) {
+            sprites.add(sprite);
+            getChildren().add(sprite.getNode());
+        }
+    }
+
+    private synchronized void updateSprites() {
+        for (Sprite sprite : sprites) sprite.update();
+    }
 
     public void setGame(Game game) {
         this.game = game;
@@ -28,18 +49,11 @@ public class GamePane extends Pane {
             @Override
             public void handle(long now) {
                 game.proceed();
-                ball.setCenterX(game.getX());
-                ball.setCenterY(game.getY());
+                addSprites();
+                updateSprites();
+                removeDeadSprites();
             }
         };
-    }
-
-    private void initSprites (int num){
-        sprites.clear();
-        for (int i=0; i<num; ++i){
-            Sprite sprite = SpriteFactory.getFactory().createSprite();
-            sprites.add(sprite);
-        }
     }
 
     private void buildGamePane(){
@@ -47,28 +61,19 @@ public class GamePane extends Pane {
         Rectangle field = new Rectangle(0, 0, Game.fieldWidth, Game.fieldHeight);
         field.setFill(Color.TRANSPARENT);
         field.setStroke(Color.BLACK);
-
-        // Create red ball
-        ball = new Circle(game.getSize(), game.getColor());
-        if (game.isHasShadow()) {
-            DropShadow shadow = new DropShadow();
-            shadow.setOffsetX(5);
-            shadow.setOffsetY(5);
-            ball.setEffect(shadow);
-        }
-
-        getChildren().setAll(field, ball);
-
-        initSprites(10);
-        for (Sprite sprite: sprites)
-            getChildren().add(sprite.getNode());
-
+        Rectangle clip = new Rectangle(0, 0, Game.fieldWidth, Game.fieldHeight);
+        setClip(clip);
+        getChildren().clear();
+        getChildren().add(field);
         requestFocus();
     }
+
     void stopGame(){timer.stop();}
 
     void startGame(){
+        SpriteFactory.getFactory().initFactory();
         buildGamePane();
+        game.initGame();
         timer.start();
     }
 }

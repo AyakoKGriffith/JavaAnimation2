@@ -6,8 +6,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.oosd.model.Game;
+import org.oosd.model.GameConfig;
 
-public class ConfigScreen implements ScreenWithGame {
+public class ConfigScreen implements Screen {
     private final Frame parent;
     private Game game;
     private final BorderPane configScreen;
@@ -46,8 +47,8 @@ public class ConfigScreen implements ScreenWithGame {
 
     private CheckBox getShadowCheckBox(){
         CheckBox cbShadow = new CheckBox("Enable Shadow");
-        cbShadow.setSelected(game.isHasShadow());
-        cbShadow.setOnAction(e-> game.setHasShadow(cbShadow.isSelected()));
+        cbShadow.setSelected(GameConfig.getInstance().isHasShadow());
+        cbShadow.setOnAction(e-> GameConfig.getInstance().setHasShadow(cbShadow.isSelected()));
         return cbShadow;
     }
 
@@ -61,14 +62,14 @@ public class ConfigScreen implements ScreenWithGame {
         rbRed.setToggleGroup(colorGroup);
         rbGreen.setToggleGroup(colorGroup);
         rbBlue.setToggleGroup(colorGroup);
-        switch(game.getColorString()){
+        switch(GameConfig.getInstance().getColorString()){
             case "GREEN" -> rbGreen.setSelected(true);
             case "BLUE" -> rbBlue.setSelected(true);
             default-> rbRed.setSelected(true);
         }
-        rbRed.setOnAction(e -> game.setColorString("RED"));
-        rbGreen.setOnAction(e -> game.setColorString("GREEN"));
-        rbBlue.setOnAction(e -> game.setColorString("BLUE"));
+        rbRed.setOnAction(e -> GameConfig.getInstance().setColorString("RED"));
+        rbGreen.setOnAction(e -> GameConfig.getInstance().setColorString("GREEN"));
+        rbBlue.setOnAction(e -> GameConfig.getInstance().setColorString("BLUE"));
         colorPane.getChildren().addAll(colorLabel, rbRed, rbGreen, rbBlue);
         return colorPane;
     }
@@ -76,15 +77,15 @@ public class ConfigScreen implements ScreenWithGame {
     private HBox getSizePane(){
         HBox sizePane = new HBox(10);
         Label sizeLabel = new Label("Size: ");
-        Slider sizeSlider = new Slider(5, 20, game.getSize());
-        Label sizeSet = new Label("" + game.getSize());
+        Slider sizeSlider = new Slider(GameConfig.MIN_SIZE, GameConfig.MAX_SIZE, GameConfig.getInstance().getSize());
+        Label sizeSet = new Label("" + GameConfig.getInstance().getSize());
         sizeSlider.setShowTickMarks(true);
         sizeSlider.setShowTickLabels(true);
         sizeSlider.setMajorTickUnit(5);
         sizeSlider.valueProperty().addListener(
                 (obs, oldVal, newVal) -> {
                     int newSize = newVal.intValue();
-                    game.setSize(newSize);
+                    GameConfig.getInstance().setSize(newSize);
                     sizeSet.setText("" + newSize);
                 }
         );
@@ -101,9 +102,6 @@ public class ConfigScreen implements ScreenWithGame {
 
     @Override
     public Node getScreen(){return configScreen; }
-
-    @Override
-    public void setGame(Game game) {this.game = game; }
 
     @Override
     public void setRoute(String path, Screen screen){
