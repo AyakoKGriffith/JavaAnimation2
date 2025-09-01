@@ -8,8 +8,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import org.oosd.UI.sprite.Sprite;
 import org.oosd.UI.sprite.SpriteFactory;
-import org.oosd.UI.sprite.Star;
 import org.oosd.model.Game;
+import org.oosd.model.GameConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +49,11 @@ public class GamePane extends Pane {
         field.setStroke(Color.BLACK);
 
         // Create red ball
-        ball = new Circle(game.getSize(), game.getColor());
-        if (game.isHasShadow()) {
+        ball = new Circle(
+                GameConfig.getInstance().getSize(),
+                GameConfig.getInstance().getColor()
+        );
+        if (GameConfig.getInstance().isHasShadow()) {
             DropShadow shadow = new DropShadow();
             shadow.setOffsetX(5);
             shadow.setOffsetY(5);
