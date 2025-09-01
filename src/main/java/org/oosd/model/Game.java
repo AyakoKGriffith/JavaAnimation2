@@ -34,7 +34,7 @@ public class Game {
     }
 
     private int getEntityNum(EntityType type) {
-        return (int) entites.stream().filter(e-> e.getType() == type).count();
+        return (int) entities.stream().filter(e-> e.getType() == type).count();
     }
 
     private synchronized void removeDeadEntities() {

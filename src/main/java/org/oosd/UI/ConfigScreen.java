@@ -77,7 +77,7 @@ public class ConfigScreen implements Screen {
     private HBox getSizePane(){
         HBox sizePane = new HBox(10);
         Label sizeLabel = new Label("Size: ");
-        Slider sizeSlider = new Slider(5, 20, GameConfig.getInstance().getSize());
+        Slider sizeSlider = new Slider(GameConfig.MIN_SIZE, GameConfig.MAX_SIZE, GameConfig.getInstance().getSize());
         Label sizeSet = new Label("" + GameConfig.getInstance().getSize());
         sizeSlider.setShowTickMarks(true);
         sizeSlider.setShowTickLabels(true);
@@ -102,9 +102,6 @@ public class ConfigScreen implements Screen {
 
     @Override
     public Node getScreen(){return configScreen; }
-
-    @Override
-    public void setGame(Game game) {this.game = game; }
 
     @Override
     public void setRoute(String path, Screen screen){
