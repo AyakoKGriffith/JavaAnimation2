@@ -8,7 +8,7 @@ import javafx.scene.layout.*;
 import org.oosd.model.Game;
 import org.oosd.model.GameConfig;
 
-public class ConfigScreen implements ScreenWithGame {
+public class ConfigScreen implements Screen {
     private final Frame parent;
     private Game game;
     private final BorderPane configScreen;

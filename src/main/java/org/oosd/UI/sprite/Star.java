@@ -3,8 +3,6 @@ package org.oosd.UI.sprite;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-import java.awt.*;
-
 public class Star extends Polygon {
     public Star() {this(10,5,5);}
     public Star (double outerRadius, double innerRadius, int numPoints){

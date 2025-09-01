@@ -33,9 +33,9 @@ public class Game {
         }
     }
 
-//    private int getEntityNum(EntityType type) {
-//        return (int) entites.stream().filter(e-> e.getType() == type).count();
-//    }
+    private int getEntityNum(EntityType type) {
+        return (int) entites.stream().filter(e-> e.getType() == type).count();
+    }
 
     private synchronized void removeDeadEntities() {
         entities.removeIf(GameEntity::isDead);

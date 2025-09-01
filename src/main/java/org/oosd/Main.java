@@ -18,13 +18,12 @@ public class Main extends Application implements Frame{
 
     private void buildScreens(){
         Screen mainScreen = new MainScreen(this);
-        ScreenWithGame configScreen = new ConfigScreen(this);
+        Screen configScreen = new ConfigScreen(this);
         ScreenWithGame gameScreen = new GameScreen(this);
 
         mainScreen.setRoute("config", configScreen);
         mainScreen.setRoute("game", gameScreen);
 
-        configScreen.setGame(game);
         configScreen.setRoute("back", mainScreen);
 
         gameScreen.setGame(game);
