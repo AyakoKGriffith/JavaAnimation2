@@ -1,10 +1,20 @@
 package org.oosd.UI.sprite;
 
 import org.oosd.model.Game;
+import org.oosd.model.GameEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class SpriteFactory {
+    private List<GameEntity> entities;
+    public synchronized void initFactory() {
+        entities = new ArrayList<>();
+    }
+    public synchronized void addEntity(GameEntity entity) {
+        entities.add(entity);
+    }
 
     private SpriteFactory(){}
 

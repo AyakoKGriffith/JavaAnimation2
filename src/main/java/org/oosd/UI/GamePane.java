@@ -28,8 +28,6 @@ public class GamePane extends Pane {
             @Override
             public void handle(long now) {
                 game.proceed();
-                ball.setCenterX(game.getX());
-                ball.setCenterY(game.getY());
             }
         };
     }
