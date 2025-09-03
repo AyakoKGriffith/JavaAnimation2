@@ -5,24 +5,22 @@ import org.oosd.model.GameConfig;
 import org.oosd.model.GameEntity;
 import org.oosd.model.Player;
 
-public class PlayerSprite implements Sprite {
-    private final Node ball;
+public class PlayerSprite implements Sprite<Player, Ball> {
+    private final Ball ball;
     private final Player player;
 
     public PlayerSprite(Player player) {
-        System.out.println("Player is created.");
         this.player = player;
         ball = new Ball(player.getSize(), GameConfig.getInstance().getColor(), GameConfig.getInstance().isHasShadow());
-        update();
     }
 
     @Override
-    public Node getNode() {
+    public Ball getNode() {
         return ball;
     }
 
     @Override
-    public GameEntity getEntity() {
+    public Player getEntity() {
         return player;
     }
 

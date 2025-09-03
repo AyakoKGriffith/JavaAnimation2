@@ -4,27 +4,30 @@ package org.oosd.UI.sprite;
 import org.oosd.model.GameEntity;
 import org.oosd.model.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SpriteFactory {
 
-    private List<GameEntity> entities;
+    private final Deque<GameEntity> entities = new ArrayDeque<>();
 
     public synchronized void initFactory() {
-        entities = new ArrayList<>();
+        entities.clear();
     }
 
     public synchronized void addEntity(GameEntity entity) {
-        entities.add(entity);
+        entities.addLast(entity);
     }
 
-    public synchronized List<Sprite> produceSprites() {
+    public synchronized void addEntities(Collection<? extends GameEntity> toAdd) {
+        for (GameEntity e : toAdd) {entities.addLast(e);}
+    }
+
+    public synchronized List<Sprite<?, ?>> produceSprites() {
         if (entities.isEmpty()) return null;
-        List<Sprite> retSprites = new ArrayList<>();
+        List<Sprite<?, ?>> retSprites = new ArrayList<>();
         while (!entities.isEmpty()) {
             GameEntity entity = entities.removeFirst();
-            Sprite sprite = produceSprite(entity);
+            Sprite<?, ?> sprite = produceSprite(entity);
             retSprites.add(sprite);
         }
         return retSprites;
@@ -41,12 +44,13 @@ public class SpriteFactory {
         return SingletonFactory.factory;
     }
 
-    private Sprite produceSprite(GameEntity entity) {
+    private Sprite<? extends GameEntity, ?> produceSprite(GameEntity entity) {
         SpriteType type = EntitySpriteMapper.getSpriteType(entity.getType());
-        return switch (type) {
+        Sprite<?, ?> sprite = switch (type) {
             case SpriteType.PLAYER -> new PlayerSprite((Player) entity);
             case SpriteType.STAR -> new StarSprite(entity);
         };
+        return sprite;
     }
 
 }
