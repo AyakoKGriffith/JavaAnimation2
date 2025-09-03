@@ -14,30 +14,28 @@ public class GameScreen implements ScreenWithGame {
     private BorderPane borderPane;
     private Screen mainScreen;
 
-
     public GameScreen(Frame frame) {
         parent = frame;
         gamePane = new GamePane();
         buildScreen();
-
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 gamePane.startGame();
+
             }
         });
     }
 
-    private StackPane getBottomPane(){
-        Button backButton = new Button("Back");
-        backButton.getStyleClass().add("menu-button");
-        backButton.setFocusTraversable(false);
-
-        backButton.setOnAction(e -> {
+    private StackPane getBottomPane() {
+        Button back = new Button("Back");
+        back.setOnAction(e -> {
             gamePane.stopGame();
             parent.showScreen(mainScreen);
         });
+        back.getStyleClass().add("menu-button");
+        back.setFocusTraversable(false);
 
-        StackPane bottomPane = new StackPane(backButton);
+        StackPane bottomPane = new StackPane(back);
         bottomPane.setAlignment(Pos.CENTER);
         bottomPane.setPadding(new Insets(0, 0, 20, 0));
         bottomPane.setFocusTraversable(false);
@@ -46,7 +44,6 @@ public class GameScreen implements ScreenWithGame {
 
     private void buildScreen() {
         borderPane = new BorderPane();
-
         // Create field border
         StackPane gamePaneWrapper = new StackPane(gamePane);
         gamePaneWrapper.setAlignment(Pos.CENTER);
@@ -55,9 +52,8 @@ public class GameScreen implements ScreenWithGame {
         borderPane.setBottom(getBottomPane());
     }
 
-
     @Override
-    public void setGame(Game game)  {
+    public void setGame(Game game) {
         gamePane.setGame(game);
     }
 

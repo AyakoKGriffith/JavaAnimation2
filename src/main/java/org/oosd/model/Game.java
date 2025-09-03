@@ -12,15 +12,18 @@ public class Game {
     private int foodNum;
     private List<GameEntity> entities;
 
-    public Game() {foodNum = 8;}
+    public Game() {
+        foodNum = 8;
+    }
 
     public void initGame() {
         player = new Player();
         entities = new ArrayList<>();
         entities.add(player);
         SpriteFactory.getFactory().addEntity(player);
-        player.setX(fieldWidth /2);
-        player.setY(fieldHeight /2);
+        player.setX(fieldWidth / 2);
+        player.setY(fieldHeight / 2);
+
     }
 
     private synchronized void fillFoods() {
@@ -34,21 +37,33 @@ public class Game {
     }
 
     private int getEntityNum(EntityType type) {
-        return (int) entities.stream().filter(e-> e.getType() == type).count();
+        return (int) entities.stream().filter(e -> e.getType() == type).count();
     }
+
 
     private synchronized void removeDeadEntities() {
         entities.removeIf(GameEntity::isDead);
     }
 
-    public void proceed(){
-        for (GameEntity entity: entities) entity.process();
+    public void proceed() {
+        for (GameEntity entity : entities) entity.process();
         removeDeadEntities();
         fillFoods();
     }
 
-    public void increaseX()  {player.increaseX();}
-    public void decreaseX()  {player.decreaseX();}
-    public void increaseY()  {player.increaseY();}
-    public void decreaseY()  {player.decreaseY();}
+    public void increaseX() {
+        player.increaseX();
+    }
+
+    public void decreaseX() {
+        player.decreaseX();
+    }
+
+    public void increaseY() {
+        player.increaseY();
+    }
+
+    public void decreaseY() {
+        player.decreaseY();
+    }
 }

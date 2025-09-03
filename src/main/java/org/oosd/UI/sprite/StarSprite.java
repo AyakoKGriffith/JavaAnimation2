@@ -14,14 +14,18 @@ public class StarSprite implements Sprite {
     }
 
     @Override
-    public Node getNode(){return star; }
+    public Node getNode() {
+        return star;
+    }
 
     @Override
-    public GameEntity getEntity() {return entity;}
+    public GameEntity getEntity() {
+        return entity;
+    }
 
     @Override
-    public void update(){
-            star.setTranslateX(entity.getX());
-            star.setTranslateY(entity.getY());
+    public void update() {
+        star.setTranslateX(entity.getX());
+        star.setTranslateY(entity.getY());
     }
 }

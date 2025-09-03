@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 import org.oosd.UI.sprite.Sprite;
 import org.oosd.UI.sprite.SpriteFactory;
 import org.oosd.model.Game;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,9 @@ public class GamePane extends Pane {
     private Game game;
     private final List<Sprite> sprites;
 
-    public GamePane() {sprites = new ArrayList<>();}
-
+    public GamePane() {
+        sprites = new ArrayList<>();
+    }
 
     private synchronized void removeDeadSprites() {
         List<Sprite> deadSprites = sprites.stream()
@@ -52,11 +54,14 @@ public class GamePane extends Pane {
                 addSprites();
                 updateSprites();
                 removeDeadSprites();
+
             }
         };
+
     }
 
-    private void buildGamePane(){
+
+    private void buildGamePane() {
         // Create field border
         Rectangle field = new Rectangle(0, 0, Game.fieldWidth, Game.fieldHeight);
         field.setFill(Color.TRANSPARENT);
@@ -65,12 +70,14 @@ public class GamePane extends Pane {
         setClip(clip);
         getChildren().clear();
         getChildren().add(field);
-        requestFocus();
+        requestFocus();  // Ensure pane gets key input
     }
 
-    void stopGame(){timer.stop();}
+    void stopGame() {
+        timer.stop();
+    }
 
-    void startGame(){
+    void startGame() {
         SpriteFactory.getFactory().initFactory();
         buildGamePane();
         game.initGame();

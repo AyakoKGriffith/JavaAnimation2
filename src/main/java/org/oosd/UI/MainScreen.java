@@ -6,7 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import org.oosd.Main;
 
 public class MainScreen implements Screen {
     private VBox mainScreen;
@@ -14,14 +13,17 @@ public class MainScreen implements Screen {
     private Frame parent;
 
     @Override
-    public Node getScreen(){return mainScreen;}
+    public Node getScreen() {
+        return mainScreen;
+    }
 
     @Override
-    public void setRoute(String path, Screen screen){
-        switch (path){
+    public void setRoute(String path, Screen screen) {
+        switch (path) {
             case "config" -> configScreen = screen;
             case "game" -> gameScreen = screen;
-            default -> {}
+            default -> {
+            }
         }
     }
 
@@ -48,9 +50,12 @@ public class MainScreen implements Screen {
         configButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");
-        exitButton.setOnAction(e-> parent.showExitConfirmation());
+        exitButton.setOnAction(e -> parent.showExitConfirmation());
         exitButton.getStyleClass().add("menu-button");
 
+
         mainScreen.getChildren().addAll(label, startButton, configButton, exitButton);
+
     }
+
 }

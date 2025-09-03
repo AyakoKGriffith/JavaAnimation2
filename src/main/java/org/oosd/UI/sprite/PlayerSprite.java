@@ -17,14 +17,19 @@ public class PlayerSprite implements Sprite {
     }
 
     @Override
-    public Node getNode(){return ball; }
+    public Node getNode() {
+        return ball;
+    }
 
     @Override
-    public GameEntity getEntity() {return player;}
+    public GameEntity getEntity() {
+        return player;
+    }
 
     @Override
-    public void update(){
+    public void update() {
         ball.setTranslateX(player.getX());
         ball.setTranslateY(player.getY());
     }
+
 }

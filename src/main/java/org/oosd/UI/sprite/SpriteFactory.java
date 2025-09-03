@@ -1,15 +1,20 @@
+
 package org.oosd.UI.sprite;
 
 import org.oosd.model.GameEntity;
 import org.oosd.model.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpriteFactory {
+
     private List<GameEntity> entities;
+
     public synchronized void initFactory() {
         entities = new ArrayList<>();
     }
+
     public synchronized void addEntity(GameEntity entity) {
         entities.add(entity);
     }
@@ -25,7 +30,8 @@ public class SpriteFactory {
         return retSprites;
     }
 
-    private SpriteFactory(){}
+    private SpriteFactory() {
+    }
 
     private static class SingletonFactory {
         private static final SpriteFactory factory = new SpriteFactory();
