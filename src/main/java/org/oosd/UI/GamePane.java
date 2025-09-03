@@ -55,6 +55,7 @@ public class GamePane extends Pane {
                 addSprites();
                 updateSprites();
                 removeDeadSprites();
+                if (game.isGameOver()) timer.stop();
             }
         };
 

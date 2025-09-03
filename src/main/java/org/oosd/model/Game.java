@@ -11,12 +11,14 @@ public class Game {
     private Player player;
     private int foodNum;
     private List<GameEntity> entities;
+    private boolean isGameOver;
 
     public Game() {
         foodNum = 8;
     }
 
     public void initGame() {
+        isGameOver = false;
         player = new Player();
         entities = new ArrayList<>();
         entities.add(player);
@@ -63,10 +65,20 @@ public class Game {
     }
 
     public void proceed() {
+        if (isGameOver) return;
+        if (player == null || player.getRemainLife() == 0) {
+
+            addMessage("Game Over", fieldWidth / 2, fieldHeight / 2);
+            isGameOver = true;
+        }
         for (GameEntity entity : entities) entity.process();
         removeDeadEntities();
         fillFoods();
         eatFood();
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 
     public void increaseX() {
