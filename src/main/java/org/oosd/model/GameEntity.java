@@ -15,7 +15,11 @@ public abstract class GameEntity {
         life = -1;
     }
 
-    private int getRemainLife() {
+    public boolean showLifeCountdown() {
+        return false;
+    }
+
+    public int getRemainLife() {
         if (life == -1) return -1; // eternal life
         int pastLife = (int) ((System.nanoTime() - birthTime) / 1_000_000_000);
         int remainLife = life - pastLife;

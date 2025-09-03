@@ -26,6 +26,12 @@ public class Game {
 
     }
 
+    private synchronized void addMessage(String text, double x, double y) {
+        Message message = new Message(text, x, y);
+        entities.add(message);
+        SpriteFactory.getFactory().addEntity(message);
+    }
+
     private synchronized void fillFoods() {
         int curFoodNum = getEntityNum(EntityType.FOOD);
         if (curFoodNum * 2 > foodNum) return;
@@ -40,6 +46,17 @@ public class Game {
         return (int) entities.stream().filter(e -> e.getType() == type).count();
     }
 
+    private void eatFood() {
+        List<GameEntity> foods = entities.stream().filter(e -> e.getType() == EntityType.FOOD).toList();
+        for (GameEntity food : foods) {
+            if (food.isCollide(player) && food instanceof Food f) {
+                f.setIsEaten();
+                player.eatFood(f);
+                addMessage("+1", player.getX(), player.getY());
+            }
+        }
+    }
+
 
     private synchronized void removeDeadEntities() {
         entities.removeIf(GameEntity::isDead);
@@ -49,6 +66,7 @@ public class Game {
         for (GameEntity entity : entities) entity.process();
         removeDeadEntities();
         fillFoods();
+        eatFood();
     }
 
     public void increaseX() {

@@ -9,6 +9,7 @@ public class Player extends GameEntity {
         setSize(GameConfig.getInstance().getSize());
         setDx(1);
         setDy(1);
+        life = 10;
     }
 
     public void increaseX() {
@@ -29,6 +30,10 @@ public class Player extends GameEntity {
     public void decreaseY() {
         setDx(0);
         setDy(Math.max(getDy() - 1, -MAX_SPEED));
+    }
+
+    public void eatFood(Food food) {
+        life += 5;
     }
 
 

@@ -2,8 +2,9 @@
 package org.oosd.UI.sprite;
 
 import org.oosd.model.GameEntity;
+import org.oosd.model.Message;
 import org.oosd.model.Player;
-
+import javafx.scene.Node;
 import java.util.*;
 
 public class SpriteFactory {
@@ -49,7 +50,9 @@ public class SpriteFactory {
         Sprite<?, ?> sprite = switch (type) {
             case SpriteType.PLAYER -> new PlayerSprite((Player) entity);
             case SpriteType.STAR -> new StarSprite(entity);
+            case SpriteType.MESSAGE -> new MessageSprite((Message) entity);
         };
+        if (entity.showLifeCountdown()) sprite = new LifeCountdownDecorator<>(sprite, 10);
         return sprite;
     }
 

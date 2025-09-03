@@ -7,6 +7,7 @@ public class EntitySpriteMapper {
         return switch (type) {
             case PLAYER -> SpriteType.PLAYER;
             case FOOD -> SpriteType.STAR;
+            case MESSAGE -> SpriteType.MESSAGE;
         };
     }
 }
