@@ -7,19 +7,22 @@ import javafx.scene.shape.Rectangle;
 import org.oosd.UI.sprite.Sprite;
 import org.oosd.UI.sprite.SpriteFactory;
 import org.oosd.model.Game;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GamePane extends Pane {
     private AnimationTimer timer;
     private Game game;
-    private final List<Sprite> sprites;
+    private final List<Sprite<?, ?>> sprites;
 
-    public GamePane() {sprites = new ArrayList<>();}
-
+    public GamePane() {
+        sprites = new ArrayList<>();
+    }
 
     private synchronized void removeDeadSprites() {
-        List<Sprite> deadSprites = sprites.stream()
+        List<Sprite<?, ?>> deadSprites = sprites.stream()
                 .filter(Sprite::isDead)
                 .toList();
         if (deadSprites.isEmpty()) return;
@@ -31,16 +34,16 @@ public class GamePane extends Pane {
     }
 
     private synchronized void addSprites() {
-        List<Sprite> list = SpriteFactory.getFactory().produceSprites();
+        List<Sprite<?, ?>> list = SpriteFactory.getFactory().produceSprites();
         if (list == null) return;
-        for (Sprite sprite : list) {
+        for (Sprite<?, ?> sprite : list) {
             sprites.add(sprite);
             getChildren().add(sprite.getNode());
         }
     }
 
     private synchronized void updateSprites() {
-        for (Sprite sprite : sprites) sprite.update();
+        for (Sprite<?, ?> sprite : sprites) sprite.update();
     }
 
     public void setGame(Game game) {
@@ -52,11 +55,14 @@ public class GamePane extends Pane {
                 addSprites();
                 updateSprites();
                 removeDeadSprites();
+                if (game.isGameOver()) timer.stop();
             }
         };
+
     }
 
-    private void buildGamePane(){
+
+    private void buildGamePane() {
         // Create field border
         Rectangle field = new Rectangle(0, 0, Game.fieldWidth, Game.fieldHeight);
         field.setFill(Color.TRANSPARENT);
@@ -65,12 +71,14 @@ public class GamePane extends Pane {
         setClip(clip);
         getChildren().clear();
         getChildren().add(field);
-        requestFocus();
+        requestFocus();  // Ensure pane gets key input
     }
 
-    void stopGame(){timer.stop();}
+    void stopGame() {
+        timer.stop();
+    }
 
-    void startGame(){
+    void startGame() {
         SpriteFactory.getFactory().initFactory();
         buildGamePane();
         game.initGame();
