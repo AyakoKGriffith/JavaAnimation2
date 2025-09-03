@@ -1,9 +1,9 @@
 package org.oosd.model;
 
 import org.oosd.UI.sprite.SpriteFactory;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.oosd.audio.AudioFacade;
 
 public class Game {
     static public final double fieldWidth = 400;
@@ -25,7 +25,7 @@ public class Game {
         SpriteFactory.getFactory().addEntity(player);
         player.setX(fieldWidth / 2);
         player.setY(fieldHeight / 2);
-
+        AudioFacade.playBgm();
     }
 
     private synchronized void addMessage(String text, double x, double y) {
@@ -42,6 +42,7 @@ public class Game {
             entities.add(food);
             SpriteFactory.getFactory().addEntity(food);
         }
+        AudioFacade.playNewFood();
     }
 
     private int getEntityNum(EntityType type) {
@@ -67,6 +68,8 @@ public class Game {
     public void proceed() {
         if (isGameOver) return;
         if (player == null || player.getRemainLife() == 0) {
+            AudioFacade.playGameFinish();
+            AudioFacade.stopBgm();
 
             addMessage("Game Over", fieldWidth / 2, fieldHeight / 2);
             isGameOver = true;
@@ -82,18 +85,22 @@ public class Game {
     }
 
     public void increaseX() {
+        AudioFacade.playChangeDir();
         player.increaseX();
     }
 
     public void decreaseX() {
+        AudioFacade.playChangeDir();
         player.decreaseX();
     }
 
     public void increaseY() {
+        AudioFacade.playChangeDir();
         player.increaseY();
     }
 
     public void decreaseY() {
+        AudioFacade.playChangeDir();
         player.decreaseY();
     }
 }
